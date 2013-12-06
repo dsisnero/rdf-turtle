@@ -31,16 +31,21 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>RDF::Turtle reader/writer <a href="http://travis-ci.org/ruby-rdf/rdf-turtle"><img src="https://secure.travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master" alt="Build Status"></a>
-</h1>
+        <h1>
+<a name="rdfturtle-readerwriter" class="anchor" href="#rdfturtle-readerwriter"><span class="octicon octicon-link"></span></a>RDF::Turtle reader/writer</h1>
 
 <p><a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> reader/writer for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a> .</p>
 
-<h2>Description</h2>
+<p><a href="http://badge.fury.io/rb/rdf-turtle"><img src="https://badge.fury.io/rb/rdf-turtle.png" alt="Gem Version"></a>
+<a href="http://travis-ci.org/ruby-rdf/rdf-turtle"><img src="https://travis-ci.org/ruby-rdf/rdf-turtle.png?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
 
 <p>This is a <a href="http://ruby-lang.org/">Ruby</a> implementation of a <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> parser for <a href="http://rubydoc.info/github/ruby-rdf/rdf/master/frames">RDF.rb</a>.</p>
 
-<h2>Features</h2>
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <p>RDF::Turtle parses <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> and <a href="http://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a> into statements or triples. It also serializes to Turtle.</p>
 
@@ -49,8 +54,10 @@
 <ul>
 <li>100% free and unencumbered <a href="http://unlicense.org/">public domain</a> software.</li>
 <li>Implements a complete parser for <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a>.</li>
-<li>Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.</li>
-</ul><h2>Usage</h2>
+<li>Compatible with Ruby &gt;= 1.9.2.</li>
+<li>Optional streaming writer, to serialize large graphs</li>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <p>Instantiate a reader from a local file:</p>
 
@@ -68,11 +75,13 @@
 end
 </code></pre>
 
-<h2>Documentation</h2>
+<h2>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
 
-<p>Full documentation available on <a href="http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.markdown">Rubydoc.info</a></p>
+<p>Full documentation available on <a href="http://rubydoc.info/github/ruby-rdf/rdf-turtle/master/file/README.md">Rubydoc.info</a></p>
 
-<h3>Principle Classes</h3>
+<h3>
+<a name="principle-classes" class="anchor" href="#principle-classes"><span class="octicon octicon-link"></span></a>Principle Classes</h3>
 
 <ul>
 <li>{RDF::Turtle::Format}
@@ -84,66 +93,74 @@ Asserts :ttl format, text/turtle mime-type and .ttl file extension.</li>
 </li>
 <li>{RDF::Turtle::Reader}</li>
 <li>{RDF::Turtle::Writer}</li>
-</ul><h3>Variations from the spec</h3>
+</ul><h3>
+<a name="variations-from-the-spec" class="anchor" href="#variations-from-the-spec"><span class="octicon octicon-link"></span></a>Variations from the spec</h3>
 
 <p>In some cases, the specification is unclear on certain issues:</p>
 
 <ul>
-<li>In section 2.1, the <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">spec</a> indicates that "Literals ,
-prefixed names and IRIs may also contain escapes to encode surrounding syntax ...",
-however the description in 5.2 indicates that only IRI_REF and the various STRING_LITERAL terms
-are subject to unescaping. This means that an IRI which might otherwise be representable using a PNAME
-cannot if the IRI contains any characters that might need escaping. This implementation currently abides
-by this restriction. Presumably, this would affect both PNAME_NS and PNAME_LN terminals.
-(This is being tracked as issues <a href="http://www.w3.org/2011/rdf-wg/track/issues/67">67</a>).</li>
-<li>The EBNF definition of IRIREF seems malformed, and has no provision for ^, as discussed elsewhere in the spec.
-We presume that [#0000- ] is intended to be [#0000-#0020].</li>
-<li>The list example in section 6 uses a list on it's own, without a predicate or object, which is not allowed
-by the grammar (neither is a blankNodeProperyList). Either the EBNF should be updated to allow for these
-forms, or the examples should be changed such that ( ... ) and [ ... ] are used only in the context of being
-a subject or object. This implementation will generate triples, however an error will be generated if the
-parser is run in validation mode.</li>
-<li>For the time being, plain literals are generated without an xsd:string datatype, but literals with an xsd:string
-datatype are saved as non-datatyped triples in the graph. This will be updated in the future when the rest of the
-library suite is brought up to date.</li>
-</ul><h2>Implementation Notes</h2>
+<li>The LC version of the <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> specification separates rules for <code>@base</code> and <code>@prefix</code> with
+closing '.' from the
+SPARQL-like <code>BASE</code> and <code>PREFIX</code> without closing '.'. This version implements a more flexible
+syntax where the <code>@</code> and closing <code>.</code> are optional and <code>base/prefix</code> are matched case independently.</li>
+<li>Additionally, both <code>a</code> and <code>A</code> match <code>rdf:type</code>.</li>
+</ul><h3>
+<a name="freebase-specific-reader" class="anchor" href="#freebase-specific-reader"><span class="octicon octicon-link"></span></a>Freebase-specific Reader</h3>
 
-<p>The reader uses a generic LL1 parser {RDF::LL1::Parser} and lexer {RDF::LL1::Lexer}. The parser takes branch and follow
-tables generated from the original <a href="http://dvcs.w3.org/hg/rdf/file/8610b8f58685/rdf-turtle/turtle.bnf">Turtle EBNF Grammar</a> described in the <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">specification</a>. Branch and Follow tables are specified in {RDF::Turtle::Meta}, which is in turn
-generated using etc/gramLL1.</p>
+<p>There is a special reader useful for processing <a href="https://developers.google.com/freebase/data">Freebase Dumps</a>. To invoke
+this, add the <code>:freebase =&gt; true</code> option to the {RDF::Turtle::Reader.new}, or
+use {RDF::Turtle::FreebaseReader} directly. As with {RDF::Turtle::Reader},
+prefix definitions may be passed in using the <code>:prefixes</code> option to
+RDF::Turtle::FreebaseReader} using the standard mechanism defined
+for <code>RDF::Reader</code>.</p>
 
-<p>The branch rules indicate productions to be taken based on a current production. Terminals are denoted
-through a set of regular expressions used to match each type of terminal, described in {RDF::Turtle::Terminals}.</p>
+<p>The <a href="https://developers.google.com/freebase/data">Freebase Dumps</a> have a very normalized form, similar to N-Triples but
+with prefixes. They also have a large amount of garbage. This Reader is
+optimized for this format and will perform faster error recovery.</p>
 
-<p>etc/turtle.bnf is used to to generate a Notation3 representation of the grammar, a transformed LL1 representation and ultimately {RDF::Turtle::Meta}.</p>
+<p>An example of reading Freebase dumps:</p>
 
-<p>Using SWAP utilities, this is done as follows:</p>
+<pre><code>require "rdf/turtle"
+fb = "../freebase/freebase-rdf-2013-03-03-00-00.ttl"
+fb_prefixes = {
+  :ns =&gt; "http://rdf.freebase.com/ns/",
+  :key =&gt; "http://rdf.freebase.com/key/",
+  :owl =&gt; "http://www.w3.org/2002/07/owl#&gt;",
+  :rdfs =&gt; "http://www.w3.org/2000/01/rdf-schema#",
+  :rdf =&gt; "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+  :xsd =&gt; "http://www.w3.org/2001/XMLSchema#"
+}
+RDF::Turtle::Reader.open(fb,
+  :freebase =&gt; true,
+  :prefixes =&gt; fb_prefixes) do |r|
 
-<pre><code>python http://www.w3.org/2000/10/swap/grammar/ebnf2turtle.py \
-  etc/turtle.bnf \
-  ttl language \
-  'http://www.w3.org/ns/formats/Turtle#' &gt; |
-sed -e 's/^  ".*"$/  g:seq (&amp;)/'  &gt; etc/turtle.n3
-
-python http://www.w3.org/2000/10/swap/cwm.py etc/turtle.n3 \
-  http://www.w3.org/2000/10/swap/grammar/ebnf2bnf.n3 \
-  http://www.w3.org/2000/10/swap/grammar/first_follow.n3 \
-  --think --data &gt; etc/turtle-bnf.n3
-
-script/gramLL1 \
-  --grammar etc/turtle-ll1.n3 \
-  --lang 'http://www.w3.org/ns/formats/Turtle#language' \
-  --output lib/rdf/turtle/meta.rb
+  r.each_statement {|stmt| puts stmt.to_ntriples}
+end
 </code></pre>
 
-<h2>Dependencies</h2>
+<h2>
+<a name="implementation-notes" class="anchor" href="#implementation-notes"><span class="octicon octicon-link"></span></a>Implementation Notes</h2>
+
+<p>The reader uses the <a href="http://rubygems.org/gems/ebnf">EBNF</a> gem to generate first, follow and branch tables, and uses
+the <code>Parser</code> and <code>Lexer</code> modules to implement the Turtle parser.</p>
+
+<p>The parser takes branch and follow tables generated from the original <a href="http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf">Turtle
+EBNF Grammar</a> described in the <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">specification</a>. Branch and
+Follow tables are specified in {RDF::Turtle::Meta}, which is in turn generated
+using the <a href="http://rubygems.org/gems/ebnf">EBNF</a> gem.</p>
+
+<h2>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <ul>
 <li>
-<a href="http://ruby-lang.org/">Ruby</a> (&gt;= 1.8.7) or (&gt;= 1.8.1 with <a href="http://rubygems.org/gems/backports">Backports</a>)</li>
+<a href="http://ruby-lang.org/">Ruby</a> (&gt;= 1.9.2)</li>
 <li>
-<a href="http://rubygems.org/gems/rdf">RDF.rb</a> (&gt;= 0.3.4)</li>
-</ul><h2>Installation</h2>
+<a href="http://rubygems.org/gems/rdf">RDF.rb</a> (&gt;= 1.1)</li>
+<li>
+<a href="http://rubygems.org/gems/ebnf">EBNF</a> (&gt;= 0.3.0)</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <p>The recommended installation method is via <a href="http://rubygems.org/">RubyGems</a>.
 To install the latest official release of the <code>RDF::Turtle</code> gem, do:</p>
@@ -151,17 +168,22 @@ To install the latest official release of the <code>RDF::Turtle</code> gem, do:<
 <pre><code>% [sudo] gem install rdf-turtle
 </code></pre>
 
-<h2>Mailing List</h2>
+<h2>
+<a name="mailing-list" class="anchor" href="#mailing-list"><span class="octicon octicon-link"></span></a>Mailing List</h2>
 
 <ul>
 <li><a href="http://lists.w3.org/Archives/Public/public-rdf-ruby/">http://lists.w3.org/Archives/Public/public-rdf-ruby/</a></li>
-</ul><h2>Author</h2>
+</ul><h2>
+<a name="author" class="anchor" href="#author"><span class="octicon octicon-link"></span></a>Author</h2>
 
 <ul>
 <li>
 <a href="http://github.com/gkellogg">Gregg Kellogg</a> - <a href="http://greggkellogg.net/">http://greggkellogg.net/</a>
 </li>
-</ul><h2>Contributing</h2>
+</ul><h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>This repository uses <a href="https://github.com/nvie/gitflow">Git Flow</a> to mange development and release activity. All submissions <em>must</em> be on a feature branch based on the <em>develop</em> branch to ease staging and integration.</p>
 
 <ul>
 <li>Do your best to adhere to the existing coding conventions and idioms.</li>
@@ -175,10 +197,13 @@ list in the the <code>README</code>. Alphabetical order applies.</li>
 <li>Do note that in order for us to merge any non-trivial changes (as a rule
 of thumb, additions larger than about 15 lines of code), we need an
 explicit <a href="http://lists.w3.org/Archives/Public/public-rdf-ruby/2010May/0013.html">public domain dedication</a> on record from you.</li>
-</ul><h2>License</h2>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>This is free and unencumbered public domain software. For more information,
 see <a href="http://unlicense.org/">http://unlicense.org/</a> or the accompanying {file:UNLICENSE} file.</p>
+
+<p>A copy of the <a href="http://dvcs.w3.org/hg/rdf/file/default/rdf-turtle/turtle.bnf">Turtle EBNF</a> and derived parser files are included in the repository, which are not covered under the UNLICENSE. These files are covered via the <a href="http://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231">W3C Document License</a>.</p>
       </section>
     </div>
 
